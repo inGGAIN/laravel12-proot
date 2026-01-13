@@ -16,7 +16,7 @@ return new class extends Migration
 		$table->string('item_name');
 		$table->decimal('target_amount', 15, 2);
 		$table->decimal('current_amount', 15, 2)->default(0);
-		$table->date('deadkine')->nullable();
+		$table->date('target_date')->nullable();
 		$table->timestamps();
         });
     }
