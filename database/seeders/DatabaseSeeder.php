@@ -15,8 +15,14 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
-
+        \App\Models\Destination::create([
+            'name' => 'Aik Seleong',
+            'description' => 'Pemandian Sungai',
+            'location' => 'Timbah Nuh',
+            'price' => 5000,
+            'image' => 'aik-seleong.jpg'
+        ]);
+        
         User::factory()->create([
             'name' => 'Test User',
             'email' => 'test@example.com',
