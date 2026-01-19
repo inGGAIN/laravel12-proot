@@ -12,13 +12,13 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('destinations', function (Blueprint $table) {
-		$table->id();
-		$table->string('name');
-		$table->text('destination');
-		$table->string('location');
-		$table->decimal('price', 12, 2);
-		$table->string('image')->nullable();
-            	$table->timestamps();
+        $table->id();
+        $table->string('name');
+        $table->text('description'); // Pastikan baris ini ada
+        $table->string('location');
+        $table->decimal('price', 15, 2);
+        $table->string('image')->nullable();
+        $table->timestamps();
         });
     }
 
