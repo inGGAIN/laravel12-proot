@@ -1,0 +1,32 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\Destination;
+use App\Models\Transaction;
+use Illuminate\Http\Request;
+
+class BookingController extends Controller
+{
+    public function checkout(Request $request, $id)
+    {
+        $wisata = Destination::findOrFail($id);
+
+        // save to transaction_table
+        $trx = Transaction::create([
+            'user_id' => Auth::id() ?? 1,
+            'destination_id' => $id,
+            'quantity' => $request->qty,
+            'total_price' => $wisata->price * $request->qty,
+            'status' => 'paid'
+        ]);
+
+        return redirect()->route('invoice', $trx->id);
+    }  
+
+    public function invoice($id)
+    {
+        $data = Transaction::with(['user', 'destination'])->findOrFail($id);
+        return view('invoice', compact('data'));
+    }
+}
