@@ -72,7 +72,7 @@
                                     <td class="px-6 py-4">
                                         <div class="flex justify-end gap-3">
                                             {{-- Tombol Edit --}}
-                                            <a href="{{ route('wisata.edit', $destination->id) }}" 
+                                            <a href="{{ route('destinations.edit', $destination->id) }}" 
                                                class="w-10 h-10 flex items-center justify-center bg-beach-sand text-beach-orange rounded-xl hover:bg-beach-orange hover:text-white transition-all duration-300 shadow-sm"
                                                title="Edit">
                                                 <i class="fa-solid fa-pen-to-square"></i>
@@ -107,10 +107,30 @@
                     </table>
                 </div>
 
-                {{-- Pagination --}}
-                <div class="px-6 py-4 bg-gray-50 border-t border-gray-100">
+               {{-- Di resources/views/transactions/index.blade.php --}}
+                <div class="p-8 bg-white border-t border-gray-100 pagination-beach">
                     {{ $destinations->links() }}
                 </div>
+
+                <style>
+                    /* Mengubah warna tombol aktif menjadi Beach Cyan */
+                    .pagination-beach nav span[aria-current="page"] span {
+                        background-color: #73c8d2 !important; /* beach-cyan */
+                        border-color: #73c8d2 !important;
+                        color: white !important;
+                    }
+                    
+                    /* Mengubah warna hover tombol angka */
+                    .pagination-beach nav a:hover {
+                        background-color: #fdf5e6 !important; /* beach-sand */
+                        color: #0046ff !important; /* beach-blue */
+                    }
+
+                    /* Mengubah warna panah prev/next */
+                    .pagination-beach nav svg {
+                        color: #73c8d2;
+                    }
+                </style>
             </div>
         </div>
 
