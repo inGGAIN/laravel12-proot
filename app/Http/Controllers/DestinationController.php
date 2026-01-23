@@ -13,6 +13,13 @@ class DestinationController extends Controller
         return view('destinations.index', compact('destinations'));
     }
 
+    public function show($id)
+    {
+        // Mengambil data destinasi atau return 404 jika tidak ditemukan
+        $destination = Destination::findOrFail($id);
+
+        return view('destinations.show', compact('destination'));
+    }
 
     public function edit(Destination $destination)
     {

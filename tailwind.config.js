@@ -14,6 +14,15 @@ export default {
             fontFamily: {
                 sans: ['Figtree', ...defaultTheme.fontFamily.sans],
             },
+
+            colors: {
+                beach: {
+                    blue: '#0046ff',   // Biru Utama
+                    cyan: '#73c8d2',   // Cyan Air
+                    sand: '#f9f9f9',   // Krem Pasir
+                    orange: '#ff9013', // Oranye Matahari
+                },
+            },
         },
     },
 

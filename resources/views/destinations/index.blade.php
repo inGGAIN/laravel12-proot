@@ -1,72 +1,105 @@
 <x-app-layout>
-    <x-slot name="header">
-        <div class="flex justify-between items-center">
-            <h2 class="font-semibold text-2xl text-gray-800">
-                📍 Daftar Destinasi
-            </h2>
-
-            <a href="{{ route('dashboard') }}"
-               class="px-4 py-2 bg-gray-200 rounded-lg hover:bg-gray-300">
-                ← Kembali ke Dashboard
-            </a>
-        </div>
-    </x-slot>
-
-    <div class="py-10">
+    <div class="py-10 bg-beach-sand/50 min-h-screen" x-data="{ 
+        open: false, 
+        currentImg: '', 
+        allImages: [],
+        allNames: [],
+        currentIndex: 0,
+        init() {
+            this.allImages = Array.from(document.querySelectorAll('.dest-img')).map(img => img.src);
+            this.allNames = Array.from(document.querySelectorAll('.dest-name')).map(el => el.innerText);
+        },
+        openLightbox(index) {
+            this.currentIndex = index;
+            this.currentImg = this.allImages[index];
+            this.open = true;
+        },
+        next() {
+            this.currentIndex = (this.currentIndex + 1) % this.allImages.length;
+            this.currentImg = this.allImages[this.currentIndex];
+        },
+        prev() {
+            this.currentIndex = (this.currentIndex - 1 + this.allImages.length) % this.allImages.length;
+            this.currentImg = this.allImages[this.currentIndex];
+        }
+    }">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-
-            <div class="bg-white rounded-xl shadow">
-                <div class="p-6 border-b flex justify-between items-center">
-                    <p class="text-gray-600">
-                        Total: <span class="font-semibold">{{ $destinations->count() }}</span> destinasi
-                    </p>
-
-                    <a href="{{ route('destinations.create') }}"
-                       class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
-                        + Tambah Destinasi
+            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+                {{-- Header Tabel --}}
+                <div class="p-6 border-b border-gray-50 flex justify-between items-center bg-white">
+                    <div>
+                        <h3 class="text-lg font-bold text-gray-800">Manajemen Destinasi</h3>
+                        <p class="text-sm text-gray-400">Total: <span class="font-bold text-beach-blue">{{ $destinations->total() }}</span> destinasi terdaftar</p>
+                    </div>
+                    <a href="{{ route('destinations.create') }}" 
+                       class="px-5 py-2.5 bg-beach-blue text-white rounded-xl hover:bg-beach-cyan transition-all duration-300 shadow-md flex items-center gap-2 font-bold text-sm">
+                        <i class="fa-solid fa-plus"></i> Tambah Destinasi
                     </a>
                 </div>
 
+                {{-- Tabel Destinasi --}}
                 <div class="overflow-x-auto">
-                    <table class="min-w-full divide-y divide-gray-200">
+                    <table class="min-w-full divide-y divide-gray-100">
                         <thead class="bg-gray-50">
                             <tr>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">No</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Nama</th>
-                                <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">Aksi</th>
+                                <th class="px-6 py-4 text-left text-xs font-black text-beach-blue uppercase tracking-widest">No</th>
+                                <th class="px-6 py-4 text-left text-xs font-black text-beach-blue uppercase tracking-widest">Foto</th>
+                                <th class="px-6 py-4 text-left text-xs font-black text-beach-blue uppercase tracking-widest">Nama Destinasi</th>
+                                <th class="px-6 py-4 text-right text-xs font-black text-beach-blue uppercase tracking-widest">Aksi</th>
                             </tr>
                         </thead>
-                        <tbody class="bg-white divide-y divide-gray-200">
-                            @forelse ($destinations as $destination)
-                                <tr class="hover:bg-gray-50">
-                                    <td class="px-6 py-4 text-sm text-gray-600">
-                                        {{ $loop->iteration + ($destinations->currentPage()-1)*$destinations->perPage() }}
+                        <tbody class="bg-white divide-y divide-gray-50">
+                            @forelse ($destinations as $index => $destination)
+                                <tr class="hover:bg-beach-sand/20 transition-colors duration-200">
+                                    <td class="px-6 py-4 text-sm text-gray-500 font-medium">
+                                        {{ ($destinations->currentPage() - 1) * $destinations->perPage() + $loop->iteration }}
                                     </td>
-                                    <td class="px-6 py-4 text-sm font-medium text-gray-800">
-                                        {{ $destination->name }}
+                                    <td class="px-6 py-4">
+                                        <div class="relative w-16 h-16 group">
+                                            <img src="{{ asset('storage/' . $destination->image) }}" 
+                                                 class="dest-img w-16 h-16 object-cover rounded-xl cursor-zoom-in group-hover:opacity-80 transition shadow-sm border border-gray-100"
+                                                 @click="openLightbox({{ $index }})" 
+                                                 alt="{{ $destination->name }}">
+                                            <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity">
+                                                <i class="fa-solid fa-magnifying-glass-plus text-white shadow-sm"></i>
+                                            </div>
+                                        </div>
                                     </td>
-                                    <td class="px-6 py-4 text-sm flex justify-end gap-2">
-                                        <a href="{{ route('destinations.edit', $destination) }}"
-                                           class="px-3 py-1 bg-yellow-500 text-white rounded hover:bg-yellow-600">
-                                            Edit
-                                        </a>
-
-                                        <form action="{{ route('destinations.destroy', $destination) }}"
-                                              method="POST"
-                                              onsubmit="return confirm('Yakin ingin menghapus destinasi ini?')">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button
-                                                class="px-3 py-1 bg-red-600 text-white rounded hover:bg-red-700">
-                                                Hapus
-                                            </button>
-                                        </form>
+                                    <td class="px-6 py-4">
+                                        <span class="dest-name text-sm font-bold text-gray-800">{{ $destination->name }}</span>
+                                        <p class="text-xs text-beach-cyan mt-0.5"><i class="fa-solid fa-location-dot mr-1"></i>{{ $destination->location }}</p>
+                                    </td>
+                                    <td class="px-6 py-4">
+                                        <div class="flex justify-end gap-3">
+                                            {{-- Tombol Edit --}}
+                                            <a href="{{ route('wisata.edit', $destination->id) }}" 
+                                               class="w-10 h-10 flex items-center justify-center bg-beach-sand text-beach-orange rounded-xl hover:bg-beach-orange hover:text-white transition-all duration-300 shadow-sm"
+                                               title="Edit">
+                                                <i class="fa-solid fa-pen-to-square"></i>
+                                            </a>
+                                        
+                                            {{-- Tombol Hapus --}}
+                                            <form action="{{ route('destinations.destroy', $destination->id) }}" 
+                                                  method="POST" 
+                                                  onsubmit="return confirm('Hapus destinasi {{ $destination->name }}?')">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" 
+                                                        class="w-10 h-10 flex items-center justify-center bg-red-50 text-red-500 rounded-xl hover:bg-red-500 hover:text-white transition-all duration-300 shadow-sm"
+                                                        title="Hapus">
+                                                    <i class="fa-solid fa-trash-can"></i>
+                                                </button>
+                                            </form>
+                                        </div>
                                     </td>
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="3" class="px-6 py-6 text-center text-gray-500">
-                                        Belum ada destinasi
+                                    <td colspan="4" class="px-6 py-12 text-center">
+                                        <div class="flex flex-col items-center">
+                                            <i class="fa-solid fa-folder-open text-4xl text-gray-200 mb-3"></i>
+                                            <p class="text-gray-400 italic">Belum ada data destinasi.</p>
+                                        </div>
                                     </td>
                                 </tr>
                             @endforelse
@@ -74,11 +107,45 @@
                     </table>
                 </div>
 
-                <div class="p-6">
+                {{-- Pagination --}}
+                <div class="px-6 py-4 bg-gray-50 border-t border-gray-100">
                     {{ $destinations->links() }}
                 </div>
             </div>
+        </div>
 
+        {{-- LIGHTBOX MODAL --}}
+        <div x-show="open" 
+             x-transition:enter="transition ease-out duration-300"
+             x-transition:enter-start="opacity-0"
+             x-transition:enter-end="opacity-100"
+             x-transition:leave="transition ease-in duration-200"
+             x-transition:leave-start="opacity-100"
+             x-transition:leave-end="opacity-0"
+             class="fixed inset-0 z-[99] flex items-center justify-center bg-beach-blue/95 p-4 backdrop-blur-sm"
+             style="display: none;"
+             @keydown.right.window="next()"
+             @keydown.left.window="prev()"
+             @keydown.escape.window="open = false">
+            
+            <button @click="open = false" class="absolute top-8 right-8 text-white/70 hover:text-white text-5xl font-light transition-all">&times;</button>
+
+            <button @click="prev()" class="absolute left-6 text-white/50 hover:text-white text-6xl transition-all transform hover:scale-125">&lsaquo;</button>
+            <button @click="next()" class="absolute right-6 text-white/50 hover:text-white text-6xl transition-all transform hover:scale-125">&rsaquo;</button>
+
+            <div class="flex flex-col items-center max-w-5xl w-full">
+                <img :key="currentImg" 
+                     :src="currentImg" 
+                     x-transition:enter="transition ease-out duration-500"
+                     x-transition:enter-start="opacity-0 scale-90"
+                     x-transition:enter-end="opacity-100 scale-100"
+                     class="max-w-full max-h-[75vh] rounded-3xl shadow-2xl border-4 border-white/10 object-contain">
+                
+                <div class="mt-8 text-center">
+                    <h4 class="text-white text-2xl font-black tracking-tight uppercase" x-text="allNames[currentIndex]"></h4>
+                    <p class="text-beach-cyan font-bold mt-2" x-text="(currentIndex + 1) + ' / ' + allImages.length"></p>
+                </div>
+            </div>
         </div>
     </div>
 </x-app-layout>
