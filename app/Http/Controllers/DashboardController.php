@@ -12,7 +12,7 @@ class DashboardController extends Controller
     public function index()
     {
         $totalDestinations = Destination::count();
-
+        $destinations = Destination::latest()->paginate(10);
         $chartData = Transaction::select(
             'destinations.name',
             DB::raw('COUNT(transactions.id) as total_booked')
@@ -21,6 +21,6 @@ class DashboardController extends Controller
         ->groupBy('destinations.id', 'destinations.name')
         ->get();
 
-        return view('dashboard', compact('totalDestinations', 'chartData'));
+        return view('dashboard', compact('totalDestinations', 'chartData', 'destinations'));
     }
 }
