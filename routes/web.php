@@ -4,15 +4,16 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TourismController;
 use App\Http\Controllers\BookingController;
+use App\Http\Controllers\DashboardController;
 
 Route::get('/', [TourismController::class, 'index'])->name('home');
 Route::get('/wisata/{id}', [TourismController::class, 'show'])->name('wisata.show');
 
 Route::middleware(['auth', 'verified'])->group(function () {
     // Dashboard bawaan Breeze
-    Route::get('/dashboard', function () {
-        return view('dashboard');
-    })->name('dashboard');
+    Route::get('/dashboard', [DashboardController::class, 'index'])
+    ->middleware(['auth', 'verified'])
+    ->name('dashboard');
 
     // Route Projek Wisata
     Route::post('/checkout/{id}', [BookingController::class, 'checkout'])->name('checkout');
