@@ -1,5 +1,5 @@
 <x-app-layout>
-    <div class="py-10 bg-beach-sand min-h-screen">
+    <div class=" bg-beach-sand min-h-screen">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -41,8 +41,24 @@
                                 <h3 class="text-lg font-black uppercase tracking-widest text-beach-blue">Bookingan Terbaru</h3>
                                 <p class="text-xs text-gray-400 mt-1">Daftar pesanan masuk yang perlu dikelola</p>
                             </div>
-                            <div class="w-12 h-12 bg-beach-sand/50 rounded-2xl flex items-center justify-center text-beach-blue">
-                                <i class="fa-solid fa-clipboard-list text-xl"></i>
+                            <div class="flex items-center gap-3 p-2 bg-beach-sand/30 rounded-3xl border border-beach-sand">
+                                {{-- Label Sederhana --}}
+
+                                {{-- Tombol PDF --}}
+                            <a href="javascript:void(0)" 
+                            onclick="confirmExport('{{ route('admin.export-pdf') }}', 'PDF')"
+                            class="flex items-center gap-2 bg-white hover:bg-beach-blue text-beach-blue hover:text-white px-5 py-2.5 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all duration-300 shadow-sm border border-beach-sand/50 group">
+                                <i class="fa-solid fa-file-pdf text-red-500 group-hover:text-white transition-colors"></i>
+                                <span>PDF</span>
+                            </a>
+
+                            {{-- Tombol Word --}}
+                            <a href="javascript:void(0)" 
+                            onclick="confirmExport('{{ route('admin.export-word') }}', 'Word')"
+                            class="flex items-center gap-2 bg-white hover:bg-blue-600 text-blue-600 hover:text-white px-5 py-2.5 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all duration-300 shadow-sm border border-beach-sand/50 group">
+                                <i class="fa-solid fa-file-word text-blue-500 group-hover:text-white transition-colors"></i>
+                                <span>Word</span>
+                            </a>
                             </div>
                         </div>
                         
@@ -219,4 +235,41 @@
             });
         });
     </script>
+    <script>
+function confirmExport(url, type) {
+    Swal.fire({
+        title: 'Ekspor Data?',
+        text: `Sistem akan menyiapkan file ${type} untuk laporan ini.`,
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#0ea5e9', // Warna Beach Blue/Cyan
+        cancelButtonColor: '#94a3b8', // Warna Gray
+        confirmButtonText: 'Ya, Download!',
+        cancelButtonText: 'Batal',
+        border: 'none',
+        borderRadius: '2rem',
+        customClass: {
+            popup: 'rounded-[2rem]', // Menyesuaikan dengan gaya rounded-3xl Anda
+            confirmButton: 'rounded-xl font-black uppercase tracking-widest text-[10px] px-6 py-3',
+            cancelButton: 'rounded-xl font-black uppercase tracking-widest text-[10px] px-6 py-3'
+        }
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // Tampilkan loading sebentar sebelum download
+            Swal.fire({
+                title: 'Memproses...',
+                text: 'Harap tunggu sebentar.',
+                timer: 2000,
+                showConfirmButton: false,
+                didOpen: () => {
+                    Swal.showLoading();
+                }
+            });
+            
+            // Arahkan ke rute export
+            window.location.href = url;
+        }
+    })
+}
+</script>
 </x-app-layout>

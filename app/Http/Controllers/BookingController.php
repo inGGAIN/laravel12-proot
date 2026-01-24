@@ -26,7 +26,11 @@ class BookingController extends Controller
 
     public function invoice($id)
     {
-        $data = Transaction::with(['user', 'destination'])->findOrFail($id);
-        return view('invoice', compact('data'));
+        $transaction = Transaction::with(['user', 'destination'])
+            ->where('id', $id)
+            ->where('user_id', auth()->id()) // Pastikan user hanya bisa buka invoice milik sendiri
+            ->firstOrFail();
+
+        return view('bookings.invoice', compact('transaction'));
     }
 }

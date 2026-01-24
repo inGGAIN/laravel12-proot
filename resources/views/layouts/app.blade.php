@@ -6,9 +6,9 @@
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
         <title>{{ config('app.name', 'ExploreIn') }}</title>
-
+        <link rel="icon" type="image/png" href="{{ asset('icon.png') }}">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-        
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=figtree:400,500,600,700,800&display=swap" rel="stylesheet" />
 
@@ -24,6 +24,27 @@
             ::-webkit-scrollbar-track { background: #fdf5e6; }
             ::-webkit-scrollbar-thumb { background: #73c8d2; border-radius: 10px; border: 3px solid #fdf5e6; }
             ::-webkit-scrollbar-thumb:hover { background: #0046ff; }
+
+            .beach-placeholder {
+        background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .beach-placeholder::before {
+        content: '';
+        position: absolute;
+        bottom: -10px;
+        left: 0;
+        right: 0;
+        height: 40px;
+        background: rgba(14, 165, 233, 0.05);
+        border-radius: 50% 50% 0 0;
+    }
         </style>
     </head>
     <body class="font-sans antialiased text-gray-900 selection:bg-beach-cyan/30">
@@ -54,7 +75,7 @@
             {{-- Footer Sederhana --}}
             <footer class="py-12 text-center">
                 <p class="text-[10px] font-black uppercase tracking-[0.2em] text-beach-blue/40">
-                    &copy; {{ date('Y') }} Explore<span class="text-beach-cyan">In</span> • Travel Management System
+                    &copy; {{ date('Y') }} Explore<span class="text-beach-cyan">In</span> • Travel Management System by | xynra
                 </p>
             </footer>
         </div>

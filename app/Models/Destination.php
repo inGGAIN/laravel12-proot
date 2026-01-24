@@ -6,7 +6,13 @@ use Illuminate\Database\Eloquent\Model;
 
 class Destination extends Model
 {
-	protected $fillable = ['name', 'destination', 'location', 'price', 'image'];
+	protected $fillable = [
+		'name',
+		'description',
+		'location',
+		'price',
+		'image'
+	];
 
 	public function bookings()
 	{

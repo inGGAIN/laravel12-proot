@@ -1,15 +1,4 @@
 <x-app-layout>
-    <x-slot name="header">
-        <div class="flex justify-between items-center">
-            <h2 class="font-bold text-2xl text-beach-blue leading-tight">
-                📦 Manajemen Booking
-            </h2>
-            <a href="{{ route('dashboard') }}" class="text-beach-blue hover:text-beach-cyan transition font-semibold">
-                &larr; Kembali ke Dashboard
-            </a>
-        </div>
-    </x-slot>
-
     <div class="py-12 bg-beach-sand min-h-screen">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white rounded-3xl shadow-xl border border-gray-100 overflow-hidden">

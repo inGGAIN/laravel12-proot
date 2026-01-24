@@ -10,14 +10,14 @@
                     <div class="relative overflow-hidden">
                         <img src="{{ asset('storage/' . $item->image) }}" alt="{{ $item->name }}" class="w-full h-56 object-cover transition-transform duration-500 group-hover:scale-110">
                         <div class="absolute top-4 right-4">
-                            <span class="bg-white/90 backdrop-blur text-cyan-700 text-sm font-bold px-3 py-1.5 rounded-full shadow-sm">
+                            <span class="bg-white/90 backdrop-blur text-red-500 text-sm font-bold px-3 py-1.5 rounded-full shadow-sm">
                                 Rp {{ number_format($item->price, 0, ',', '.') }}
                             </span>
                         </div>
                     </div>
                     
                     <div class="p-6">
-                        <h3 class="text-xl font-bold text-gray-900 mb-2 group-hover:text-cyan-600 transition-colors">{{ $item->name }}</h3>
+                        <h3 class="text-xl font-bold text-gray-900 mb-2 group-hover:text-orange-600 transition-colors">{{ $item->name }}</h3>
                         
                         <p class="text-sm text-cyan-600 mb-4 flex items-center gap-2">
                             <i class="fas fa-map-marker-alt"></i> {{ $item->location }}
@@ -27,7 +27,7 @@
                             {{ $item->description }}
                         </p>
 
-                        <a href="{{ route('wisata.show', $item->id) }}" class="inline-flex items-center w-full justify-center px-6 py-3 bg-cyan-600 border border-transparent rounded-xl font-bold text-xs text-white uppercase tracking-widest hover:bg-cyan-700 active:bg-cyan-900 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:ring-offset-2 transition duration-150">
+                        <a href="{{ route('wisata.show', $item->id) }}" class="inline-flex items-center w-full justify-center px-6 py-3 bg-blue-600 border border-transparent rounded-xl font-bold text-xs text-white uppercase tracking-widest hover:bg-cyan-700 active:bg-cyan-900 focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:ring-offset-2 transition duration-150">
                             Lihat Detail Destinasi
                         </a>
                     </div>
